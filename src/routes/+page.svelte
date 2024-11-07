@@ -455,9 +455,9 @@
 
 <div class="w-full flex justify-center items-center bg-neutral-300">
 	<div class="my-8 md:my-20 w-[95%] sm:w-[90%] md:w-[50rem] bg-white rounded-3xl shadow-2xl">
-		<h1 class="relative text-center font-extrabold text-5xl mt-8 tracking-wide">Pizza Orders</h1>
+		<h1 class="relative text-center font-extrabold text-4xl md:text-5xl mt-8 tracking-wide">Pizza Orders</h1>
 		<div class="w-[100%] flex justify-center mt-4">
-			<div class="h-1 w-[50%] bg-primary rounded-full"></div>
+			<div class="h-1 w-[80%] md:w-[50%] bg-primary rounded-full"></div>
 		</div>
 
 		{#if orderID != null && orderID != ""}
@@ -526,7 +526,7 @@
 								</div>
 							</div>
 							
-							<div class="h-12 flex items-center justify-end gap-2">
+							<div class="h-12 flex items-center justify-end md:gap-2">
 								{#if order.order.some((orderItem) => orderItem.id == item.id)}
 									<div in:fly={{ x: 70 }} out:fly={{ x: 70 }} class="flex justify-center items-center">
 										<!-- svelte-ignore a11y_consider_explicit_label -->
@@ -556,7 +556,7 @@
 
 
 		{#if order.name != "" && order.grade != ""}
-			<section class="p-12 w-[95%] md:w-[70%] mx-auto">
+			<section class="p-6 md:p-12 w-[95%] md:w-[70%] mx-auto">
 				<h1 class="text-4xl font-bold my-4 mt-12 monofont">{order.name}'s Order Summary</h1>
 
 				{#if order.order.length == 0}
@@ -625,7 +625,7 @@
 
 <style class="postcss">
 	.section-header {
-		@apply text-4xl font-bold my-4;
+		@apply text-3xl md:text-4xl font-bold my-4;
 	}
 
 	.section-subheading {
@@ -633,7 +633,7 @@
 	}
 
 	.section-subheader {
-		@apply text-3xl font-bold mb-4 mt-10;
+		@apply text-2xl md:text-3xl font-bold mb-4 mt-10;
 	}
 
 
