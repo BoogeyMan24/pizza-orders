@@ -51,7 +51,7 @@
 <div class="w-full h-[calc(100vh_-_10rem)] flex justify-center items-center">
 	<div class="p-8 border rounded-xl shadow-xl">
 		<div class="w-80 flex flex-col g-4">
-			<h1 class="pr-24 text-xl text-primary font-bold">Login as Stuco!</h1>
+			<h1 class="pr-24 text-xl text-primary font-bold">Login to see the Orders!</h1>
 			<div class="mt-4 mb-8 flex flex-col gap-2">
 				<label class="flex flex-col">
 					Email

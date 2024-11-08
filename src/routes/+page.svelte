@@ -349,53 +349,58 @@
 
 
 	let orderID: string | null = $state(null);
+	let loading: boolean = $state(false);
 	async function completeOrder() {
-		let res = await supabase
-			.from ("pizza_days")
-			.select("*")
-
-		let upcoming: Date | null = null;
-
-		if (res.error == null) {
-			let days = res.data;
-			
-			for (let day of days) {
-				if (day.cancelled) {
-					continue;
-				}
-
-				let date = new Date(day.date);
-				date.setHours(23);
-				date.setMinutes(59);
-				date.setSeconds(59);
-
-				if (date.getTime() - new Date(Date.now()).getTime() > 0 && (upcoming == null || upcoming.getTime() - date.getTime() > 0)) {
-					upcoming = date;
-				}
-			}
-		} else {
-			toast.error("Something went wrong.");
-			console.error("couldn't get pizza days");
-			return;
-		}
-
-		if (upcoming == null) {
-			toast.error("Something went wrong.");
-			console.error("couldn't get pizza days");
-			return;
-		}
+		loading = true;
 
 		toast.promise( 
 			new Promise(async (resolve, reject) => {
+				let res = await supabase
+					.from ("pizza_days")
+					.select("*")
+
+				let upcoming: Date | null = null;
+
+				if (res.error == null) {
+					let days = res.data;
+					
+					for (let day of days) {
+						if (day.cancelled) {
+							continue;
+						}
+
+						let date = new Date(day.date);
+						date.setHours(23);
+						date.setMinutes(59);
+						date.setSeconds(59);
+
+						if (date.getTime() - new Date(Date.now()).getTime() > 0 && (upcoming == null || upcoming.getTime() - date.getTime() > 0)) {
+							upcoming = date;
+						}
+					}
+				} else {
+					toast.error("Something went wrong.");
+					console.error("couldn't get pizza days");
+					return;
+				}
+
+				if (upcoming == null) {
+					toast.error("Something went wrong.");
+					console.error("couldn't get pizza days");
+					return;
+				}
+
+
+
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 
 				orderID = order.name.toLowerCase().replaceAll(" ", "-") + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9);
 
-				let res = await supabase
+				let resInsert = await supabase
 					.from("orders")
 					.insert({ name: order.name, grade: order.grade, order: order.order, order_id: orderID, total: order.total, pizza_day: `${upcoming?.getFullYear()}-${upcoming?.getMonth() + 1}-${upcoming?.getDate()}` });
 
-				if (res.error != null) {
+				if (resInsert.error != null) {
 					reject();
 				} else {
 					resolve("pog");
@@ -412,6 +417,8 @@
 				error: "Failed to order!"
 			}
 		);
+
+		loading = false;
 	}
 
 	$effect(() => {
@@ -461,7 +468,7 @@
 		</div>
 
 		{#if orderID != null && orderID != ""}
-			<div class="bg-yellow-300 bg-opacity-60 rounded-2xl flex items-center mx-12 mt-12 py-6 px-10 gap-4">
+			<div class="bg-yellow-300 bg-opacity-60 rounded-2xl flex items-center mx-12 mt-12 py-6 px-6 md:px-10 gap-4">
 				<i class="scale-125 fa-solid fa-triangle-exclamation text-yellow-600"></i>
 				<h1>You already have an order! <button onclick={checkForExistingOrder} class="text-sm hover:text-primary font-semibold cursor-pointer">Click Here</button></h1>
 			</div>
