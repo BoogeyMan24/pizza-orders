@@ -410,6 +410,8 @@
 
 					localStorage.setItem("orderID", orderID);
 				}
+
+				loading = false;
 			}),
 			{
 				loading: "Placing order...",
@@ -417,8 +419,6 @@
 				error: "Failed to order!"
 			}
 		);
-
-		loading = false;
 	}
 
 	$effect(() => {
@@ -609,7 +609,7 @@
 
 
 					<div class="mt-12 flex flex-col items-center justify-center">	
-						<button disabled={order.complete} onclick={completeOrder} class="bg-primary rounded-xl px-10 py-2 hover:opacity-90 text-white font-medium">Complete Order</button>
+						<button disabled={order.complete || loading} onclick={completeOrder} class="bg-primary rounded-xl px-10 py-2 hover:opacity-90 text-white font-medium">Complete Order</button>
 						{#if order.complete}
 							<p class="mt-2">Thanks for Ordering!</p>
 						{/if}
