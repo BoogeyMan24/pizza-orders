@@ -564,41 +564,7 @@
 						<p class="font-semibold text-red-500">You gotta get at least 1 thing :)</p>
 					</div>
 				{:else}
-					<div class="flex justify-between my-2">
-						<h3 class="monofont">Date: {new Date(Date.now()).getDate()} {convertNumToStringMonth(new Date(Date.now()).getMonth() + 1)}, {new Date(Date.now()).getFullYear()}</h3>
-						<h3 class="monofont">{new Date(Date.now()).getHours()}:{new Date(Date.now()).getMinutes()}</h3>
-					</div>
-
-					{#each order.order as orderItem}
-						<div class="py-2 flex justify-between items-center">
-							<div class="flex items-center gap-6">
-								<h3 class="monofont w-2">{orderItem.quantity}</h3>
-								<h3 class="monofont">x</h3>
-								<h3 class="monofont">{orderItem.name}</h3>
-							</div>
-							<div class="flex justify-between items-center w-16">
-								<h3 class="monofont">€</h3>
-								<h3 class="monofont">{(orderItem.cost * orderItem.quantity).toFixed(2)}</h3>
-							</div>
-						</div>
-					{/each}
-
-					<!-- <div class="py-2 flex justify-between items-center">
-						<div class="flex items-center gap-6">
-							<h3 class="w-24">Petr's Tax</h3>
-
-						</div>
-						<div class="flex justify-between items-center w-16">
-							<h3>€</h3>
-							<h3 class="">100.00</h3>
-						</div>
-						
-					</div> -->
-
-					<div class="mt-4 h-[2px] w-full mx-auto bg-black rounded-full"></div>
-					<div>
-						<h3 class="mt-2 text-end text-2xl monofont">€ {order.total.toFixed(2)}</h3>
-					</div>
+					
 
 
 					<div class="mt-12 flex flex-col items-center justify-center">	

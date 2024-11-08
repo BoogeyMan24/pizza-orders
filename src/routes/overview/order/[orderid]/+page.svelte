@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import { fade, fly } from "svelte/transition";
+	import toast from "svelte-hot-french-toast";
 
 	let props = $props();
-	let { data: { order } } = props;
+	let { data: { order, supabase } } = props;
 
 
 	function convertNumToStringMonth(num: number) {
@@ -48,33 +47,31 @@
 
 	let date = new Date(order.pizza_day);
 
+	let loading: boolean = $state(false);
 
-	let confirmDialog: boolean = $state(false);
+	async function markAsPaid(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement; }) {
+		loading = true;
 
-	function newOrder() {
-		localStorage.clear();
-		goto("/");
+		let res = await supabase
+			.from("orders")
+			.update({ paid: true })
+			.eq("order_id", order.order_id);
+
+		if (res.error != null) {
+			toast.error("Failed to update!");
+			console.log("Couldn't update");
+		} else {
+			order.paid = true;
+		}
+		
+
+		loading = false;
 	}
 </script>
 
-{#if confirmDialog}
-	<div onclick={() => confirmDialog = !confirmDialog} transition:fade class="absolute w-dvw h-dvh bg-black opacity-20 z-40"></div>
-{/if}
-
-{#if confirmDialog}
-	<div class="absolute w-dvw h-dvh flex justify-center items-center">
-		<div transition:fly={{ y: 100 }} class="relative w-[28rem] bg-white rounded-2xl p-6 z-50">
-			<button onclick={() => confirmDialog = !confirmDialog} class="absolute top-4 right-4 scale-150">
-				<i class="fa-solid fa-xmark text-gray-400 hover:text-gray-300 transition-all"></i>
-			</button>
-			<h1 class="text-red-500 font-bold text-2xl mb-1">Are you sure?</h1>
-			<h2>This action is permanent and you will lose this order.</h2>
-			<div class="mt-2 flex justify-end items-center">
-				<button onclick={newOrder} class="text-white font-bold hover:bg-red-500 bg-red-400 transition-all px-6 py-1 rounded-xl">Confirm</button>
-			</div>
-		</div>
-	</div>
-{/if}
+<a href="/overview" class="absolute w-32 top-20 left-0 m-2 px-4 gap-4 py-1 bg-gray-200 hover:opacity-80 rounded-xl flex items-center">
+	<i class="fa-solid fa-arrow-left-long"></i> Back
+</a>
 
 <section class="p-12 w-[95%] md:w-[40rem] mx-auto">
 	<h1 class="text-4xl font-bold my-4 mt-12 monofont">{order.name}'s Order Summary</h1>
@@ -116,13 +113,25 @@
 		<h3 class="mt-2 text-end text-2xl monofont">€ {order.total.toFixed(2)}</h3>
 	</div>
 
-	{#if !order.paid}
+	<!-- {#if !order.paid}
 		<div class="h-24 flex justify-center items-center">
 			<button onclick={() => confirmDialog = true} class="text-white font-bold hover:bg-red-500 bg-red-400 transition-all px-6 py-2 rounded-xl">Change Order</button>
 		</div>
+	{/if} -->
+
+	{#if loading}
+		<i class="fa-solid fa-spinner animate-spin"></i>
+	{:else}
+		<h1 class={"font-bold " + (order.paid ? "text-green-400" : "text-red-500")}>{order.paid ? "Paid" : "Not Paid"}</h1>
 	{/if}
 
-	{#if order.paid}
+	{#if !order.paid}
+		<div class="flex justify-center items-center gap-12 mt-12">
+			<button class:disabled={loading} onclick={markAsPaid} class="px-8 py-2 bg-green-400 rounded-xl text-white font-bold shadow-lg">Mark as Paid</button>
+		</div>
+	{/if}
+
+	<!-- {#if order.paid}
 		<div class="mt-8">
 			<h1 class="text-center text-2xl font-bold text-green-500">You're all set!</h1>
 			<h1 class="text-center font-medium">Don't forget to pick up your order.</h1>
@@ -132,7 +141,7 @@
 			<h1 class="text-center text-xl font-bold text-red-500">This order has not been paid yet!</h1>
 			<h1 class="text-center font-medium">Please make sure to pay at the pizza order stand.</h1>
 		</div>
-	{/if}
+	{/if} -->
 </section>
 
 
