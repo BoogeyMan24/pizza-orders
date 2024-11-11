@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>{order.name}'s Order Summary | Pizza Orders</title>
+</svelte:head>
+
 <script lang="ts">
 	import toast from "svelte-hot-french-toast";
 

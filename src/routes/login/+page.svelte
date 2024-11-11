@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>Login | Pizza Orders</title>
+</svelte:head>
+
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import toast from "svelte-hot-french-toast";

@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>Dashboard | Pizza Orders</title>
+</svelte:head>
+
 <script lang="ts">
 	import PizzaOrderCard from "$components/PizzaOrderCard.svelte";
 	import { onMount } from "svelte";

@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>Orders on {date.getDate() + " " + convertNumToStringMonth(date.getMonth() + 1) + ", " + date.getFullYear()} | Pizza Orders</title>
+</svelte:head>
+
 <script lang="ts">
 	import { page } from "$app/stores";
 	import OrderCard from "$components/OrderCard.svelte";
@@ -83,7 +87,7 @@
 
 
 <div class="mt-16 pl-24">
-	<h1 class="text-3xl font-bold mb-2">{date.getDate() + " " + convertNumToStringMonth(date.getMonth() + 1) + ", " + date.getFullYear()} </h1>
+	<h1 class="text-3xl font-bold mb-2">{date.getDate() + " " + convertNumToStringMonth(date.getMonth() + 1) + ", " + date.getFullYear()}</h1>
 	<div class="-ml-2 h-1 w-[19rem] bg-primary"></div>
 </div>
 

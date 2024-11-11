@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>{order.name}'s Order Summary | Pizza Orders</title>
+</svelte:head>
+
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { fade, fly } from "svelte/transition";
