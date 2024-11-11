@@ -94,9 +94,16 @@
 		</div>
 	</div>
 {:else}
-	<div class="grid grid-cols-3 w-full px-24 mt-8 gap-12">
-		{#each orders as order, index}
-			<OrderCard {...order} {index} />
-		{/each}
-	</div>
+	
+	{#if orders.length == 0}
+		<div class="h-[20rem] w-full flex justify-center items-center">
+			<h1 class="text-red-500 font-bold text-xl">No orders found!</h1>
+		</div>
+	{:else}
+		<div class="grid grid-cols-3 w-full px-24 mt-8 gap-12">
+			{#each orders as order, index}
+				<OrderCard {...order} {index} />
+			{/each}
+		</div>
+	{/if}
 {/if}

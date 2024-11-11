@@ -12,6 +12,7 @@
 	}
 
 	let pizzaOrderCards: PizzaOrderCardType[] = $state([]);
+	let pizzaOrderCardsPast: PizzaOrderCardType[] = $state([]);
 
 	let loading = $state(true);
 	onMount(async () => {
@@ -24,13 +25,18 @@
 			console.log("Couldn't get pizza days.");
 		} else {
 			pizzaOrderCards = pizzaOrderCardsRes.data;
+
 			pizzaOrderCards.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
 			for (let date of pizzaOrderCards) {
-				if (new Date(date.date).getTime() - Date.now() > 0) {
-					pizzaOrderCards.push(pizzaOrderCards.shift());
+				if (new Date(date.date).getTime() - Date.now() < 0) {
+					pizzaOrderCardsPast.push(pizzaOrderCards.shift() as PizzaOrderCardType);
+					console.log(pizzaOrderCards);
 				}
 			}
+
+			pizzaOrderCards = pizzaOrderCards;
+			pizzaOrderCardsPast = pizzaOrderCardsPast;
 
 			loading = false;
 		}
@@ -51,8 +57,20 @@
 		</div>
 	</div>
 {:else}
-	<div class="grid grid-cols-3 w-full px-24 mt-8 gap-12">
+	<div class="mt-16 pl-24 -mb-4">
+		<h1 class="text-xl font-bold">Upcoming</h1>
+	</div>
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full px-24 mt-8 gap-6">
 		{#each pizzaOrderCards as pizzaOrderCard}
+			<PizzaOrderCard {...pizzaOrderCard} />
+		{/each}
+	</div>
+
+	<div class="mt-16 pl-24 -mb-4">
+		<h1 class="text-xl font-bold">Past</h1>
+	</div>
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full px-24 mt-8 gap-6">
+		{#each pizzaOrderCardsPast as pizzaOrderCard}
 			<PizzaOrderCard {...pizzaOrderCard} />
 		{/each}
 	</div>

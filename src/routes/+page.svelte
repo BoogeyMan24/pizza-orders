@@ -272,7 +272,7 @@
 		
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		order.name = localStorage.getItem("name") ?? "";
 		order.grade = localStorage.getItem("grade") ?? "";
 
@@ -285,9 +285,31 @@
 
 		orderID = localStorage.getItem("orderID");
 
-		console.log(orderID);
+		
+
 		if (orderID != null && orderID != "") {
-			goto("/order/" + orderID);
+			let res = await supabase
+				.from("orders")
+				.select("*")
+				.eq("order_id", orderID)
+				.maybeSingle();
+
+			if (res.error == null && res.data != null) {
+				let date = new Date(res.data.pizza_day);
+				date.setHours(23, 59, 59);
+
+				date = new Date(date.getTime() + 60 * 60 * 24 * 1000);
+
+				if (Date.now() - date.getTime() < 0) {
+					goto("/order/" + orderID);
+				} else {
+					orderID = null;
+					localStorage.removeItem("orderID");
+				}
+			} else {
+				orderID = null;
+				localStorage.removeItem("orderID");
+			}
 		}
 	});
 
