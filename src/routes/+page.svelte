@@ -276,6 +276,8 @@
 		
 	}
 
+	let upcoming: Date | null = $state(null);
+
 	onMount(async () => {
 		order.name = localStorage.getItem("name") ?? "";
 		order.grade = localStorage.getItem("grade") ?? "";
@@ -314,6 +316,42 @@
 				orderID = null;
 				localStorage.removeItem("orderID");
 			}
+		}
+
+
+
+		let res = await supabase
+			.from ("pizza_days")
+			.select("*")
+
+
+		if (res.error == null) {
+			let days = res.data;
+			
+			for (let day of days) {
+				if (day.cancelled) {
+					continue;
+				}
+
+				let date = new Date(day.date);
+				date.setHours(23);
+				date.setMinutes(59);
+				date.setSeconds(59);
+
+				if (date.getTime() - new Date(Date.now()).getTime() > 0 && (upcoming == null || upcoming.getTime() - date.getTime() > 0)) {
+					upcoming = date;
+				}
+			}
+		} else {
+			toast.error("Something went wrong.");
+			console.error("couldn't get pizza days");
+			return;
+		}
+
+		if (upcoming == null) {
+			toast.error("Something went wrong.");
+			console.error("couldn't get pizza days");
+			return;
 		}
 	});
 
@@ -381,43 +419,6 @@
 
 		toast.promise( 
 			new Promise(async (resolve, reject) => {
-				let res = await supabase
-					.from ("pizza_days")
-					.select("*")
-
-				let upcoming: Date | null = null;
-
-				if (res.error == null) {
-					let days = res.data;
-					
-					for (let day of days) {
-						if (day.cancelled) {
-							continue;
-						}
-
-						let date = new Date(day.date);
-						date.setHours(23);
-						date.setMinutes(59);
-						date.setSeconds(59);
-
-						if (date.getTime() - new Date(Date.now()).getTime() > 0 && (upcoming == null || upcoming.getTime() - date.getTime() > 0)) {
-							upcoming = date;
-						}
-					}
-				} else {
-					toast.error("Something went wrong.");
-					console.error("couldn't get pizza days");
-					return;
-				}
-
-				if (upcoming == null) {
-					toast.error("Something went wrong.");
-					console.error("couldn't get pizza days");
-					return;
-				}
-
-
-
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 
 				orderID = order.name.toLowerCase().replaceAll(" ", "-") + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9);
@@ -461,8 +462,6 @@
 
 
 	async function checkForExistingOrder(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement; }) {
-		
-
 		if (localStorage.getItem("orderID") != null && localStorage.getItem("orderID") != "") {
 			orderID = localStorage.getItem("orderID");
 
@@ -507,12 +506,12 @@
 			<div class="flex items-center gap-8">
 				<label class="w-[50%]">
 					<p class="font-medium">Name</p>
-					<input disabled={order.complete} bind:value={order.name} oninput={onNameInput} onkeydown={validateKey} maxlength="16"  type="text" class="h-10 w-full p-2 border-4 rounded-xl border-gray-300 focus:border-sky-300 transition-all outline-none">
+					<input disabled={order.complete || loading} bind:value={order.name} oninput={onNameInput} onkeydown={validateKey} maxlength="16"  type="text" class="h-10 w-full p-2 border-4 rounded-xl border-gray-300 focus:border-sky-300 transition-all outline-none">
 				</label>
 				<label class="w-28">
 					<p class="font-medium">Grade</p>
 					<div class="h-10 flex items-center">
-						<select disabled={order.complete} bind:value={order.grade} onchange={onGradeInput} class="w-32">
+						<select disabled={order.complete || loading} bind:value={order.grade} onchange={onGradeInput} class="w-32">
 							<option value="7">12 YO</option>
 							<option value="8">13 YO</option>
 							<option value="9">Sec 1</option>
@@ -563,7 +562,7 @@
 								{#if order.order.some((orderItem) => orderItem.id == item.id)}
 									<div in:fly={{ x: 70 }} out:fly={{ x: 70 }} class="flex justify-center items-center">
 										<!-- svelte-ignore a11y_consider_explicit_label -->
-										<button disabled={order.complete} onclick={() => decrementOrderItem(item.id, item.name)} class="size-8 flex justify-center items-center rounded-full bg-primary hover:opacity-80 transition-all">
+										<button disabled={order.complete || loading} onclick={() => decrementOrderItem(item.id, item.name)} class="size-8 flex justify-center items-center rounded-full bg-primary hover:opacity-80 transition-all">
 											<i class="fa-solid fa-minus text-white"></i>
 										</button>
 									</div>
@@ -576,7 +575,7 @@
 
 								<!-- svelte-ignore a11y_consider_explicit_label -->
 								<div transition:fly={{ x: 100 }} class="flex justify-center items-center z-50">
-									<button disabled={order.complete} onclick={() => addToOrder(item.id, item.name, item.cost)} class="size-8 flex justify-center items-center rounded-full bg-primary hover:opacity-80 transition-all">
+									<button disabled={order.complete || loading} onclick={() => addToOrder(item.id, item.name, item.cost)} class="size-8 flex justify-center items-center rounded-full bg-primary hover:opacity-80 transition-all">
 										<i class="fa-solid fa-plus text-white"></i>
 									</button>
 								</div>
@@ -634,8 +633,13 @@
 					</div>
 
 
-					<div class="mt-12 flex flex-col items-center justify-center">	
-						<button disabled={order.complete || loading} onclick={completeOrder} class="bg-primary rounded-xl px-10 py-2 hover:opacity-90 text-white font-medium">Complete Order</button>
+					<div class="mt-12 flex flex-col items-center justify-center">
+						<button disabled={order.complete || loading || upcoming == null} onclick={completeOrder} class="bg-primary rounded-xl px-10 py-2 hover:opacity-90 text-white font-medium">Complete Order</button>
+						{#if upcoming == null}
+							<p class="font-semibold text-red-500">Please enter a name and grade!</p>
+						{:else}
+							<h3 class="mt-2 text-sm">Ordering for the {upcoming?.getDate() + " " + convertNumToStringMonth(upcoming?.getMonth() + 1) + ", " + upcoming?.getFullYear()}</h3>
+						{/if}
 						{#if order.complete}
 							<p class="mt-2">Thanks for Ordering!</p>
 						{/if}
