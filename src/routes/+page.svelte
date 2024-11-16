@@ -206,7 +206,7 @@
 			},
 			{
 				id: "fanta",
-				name: "Dr. Pepper",
+				name: "Fanta",
 				description: "",
 				cost: 2.5
 			},
