@@ -3,10 +3,14 @@
 </svelte:head>
 
 <script lang="ts">
+	import { page } from "$app/stores";
+	import { onMount } from "svelte";
 	import toast from "svelte-hot-french-toast";
 
 	let props = $props();
 	let { data: { order, supabase } } = props;
+
+	let path = $page.url.pathname;
 
 
 	function convertNumToStringMonth(num: number) {
@@ -73,7 +77,7 @@
 	}
 </script>
 
-<a href="/overview" class="absolute w-32 top-20 left-0 m-2 px-4 gap-4 py-1 bg-gray-200 hover:opacity-80 rounded-xl flex items-center">
+<a href={"/overview/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()} class="absolute w-32 top-20 left-0 m-2 px-4 gap-4 py-1 bg-gray-200 hover:opacity-80 rounded-xl flex items-center">
 	<i class="fa-solid fa-arrow-left-long"></i> Back
 </a>
 

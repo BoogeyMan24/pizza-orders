@@ -572,7 +572,6 @@
 									</div>
 								{/if}
 
-
 								<!-- svelte-ignore a11y_consider_explicit_label -->
 								<div transition:fly={{ x: 100 }} class="flex justify-center items-center z-50">
 									<button disabled={order.complete || loading} onclick={() => addToOrder(item.id, item.name, item.cost)} class="size-8 flex justify-center items-center rounded-full bg-primary hover:opacity-80 transition-all">
