@@ -134,7 +134,7 @@
 	{:else}
 		<div class="mt-8">
 			<h1 class="text-center text-xl font-bold text-red-500">This order has not been paid yet!</h1>
-			<h1 class="text-center font-medium">Please make sure to pay at the pizza order stand.</h1>
+			<h1 class="text-center font-medium">Please make sure to pay at the pizza order stand on Thursday.</h1>
 		</div>
 	{/if}
 </section>
