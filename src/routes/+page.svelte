@@ -460,7 +460,6 @@
 		}
 	}
 
-
 	async function checkForExistingOrder(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement; }) {
 		if (localStorage.getItem("orderID") != null && localStorage.getItem("orderID") != "") {
 			orderID = localStorage.getItem("orderID");
@@ -487,7 +486,13 @@
 
 <div class="w-full flex justify-center items-center bg-neutral-300">
 	<div class="my-8 md:my-20 w-[95%] sm:w-[90%] md:w-[50rem] bg-white rounded-3xl shadow-2xl">
-		<h1 class="relative text-center font-extrabold text-4xl md:text-5xl mt-8 tracking-wide">Pizza Orders</h1>
+		<h1 class="relative text-center font-extrabold text-4xl md:text-5xl mt-8 tracking-wide">
+			Pizza Orders
+			<!-- svelte-ignore a11y_consider_explicit_label -->
+			<a href="faq" class="absolute -translate-y-3 -translate-x-2">
+				<i class="fa-solid fa-circle-question scale-[35%]"></i>
+			</a>
+		</h1>
 		<div class="w-[100%] flex justify-center mt-4">
 			<div class="h-1 w-[80%] md:w-[50%] bg-primary rounded-full"></div>
 		</div>
@@ -506,7 +511,7 @@
 			<div class="flex items-center gap-8">
 				<label class="w-[50%]">
 					<p class="font-medium">Name</p>
-					<input disabled={order.complete || loading} bind:value={order.name} oninput={onNameInput} onkeydown={validateKey} maxlength="16"  type="text" class="h-10 w-full p-2 border-4 rounded-xl border-gray-300 focus:border-sky-300 transition-all outline-none">
+					<input disabled={order.complete || loading} bind:value={order.name} oninput={onNameInput} onkeydown={validateKey} maxlength="12"  type="text" class="h-10 w-full p-2 border-4 rounded-xl border-gray-300 focus:border-sky-300 transition-all outline-none">
 				</label>
 				<label class="w-28">
 					<p class="font-medium">Grade</p>
@@ -651,10 +656,16 @@
 			</div>
 		{/if}
 
-		<div class="mb-2 flex justify-center items-center gap-2">
-			<h5 class="font-medium opacity-70 text-sm">Already ordered (on this device)?</h5>
-
-			<button onclick={checkForExistingOrder} class="text-sm hover:text-primary opacity-70 hover:opacity-100 font-semibold cursor-pointer">Click Here</button>
+		<div class="mb-2 flex justify-center items-center gap-6">
+			<div class="flex justify-center items-center gap-2">
+				<h5 class="font-medium opacity-70 text-sm">Searching for your order?</h5>
+				<a href="order" class="text-sm hover:text-primary opacity-70 hover:opacity-100 font-semibold cursor-pointer">Check Here</a>
+			</div>
+			•
+			<div class="flex justify-center items-center gap-2">
+				<h5 class="font-medium opacity-70 text-sm">Got questions?</h5>
+				<a href="faq" class="text-sm hover:text-primary opacity-70 hover:opacity-100 font-semibold cursor-pointer">FAQ</a>
+			</div>
 		</div>
 	</div>
 </div>

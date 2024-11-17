@@ -9,7 +9,7 @@ export async function load({ params, locals: { supabase } }) {
 		.single();
 
 	if (error) {
-		redirect(303, "/");
+		redirect(303, "/order");
 	}
 
 	return {
