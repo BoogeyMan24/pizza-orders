@@ -6,9 +6,11 @@
 
 
 	async function logout() {
-		const { error } = await supabase.auth.signOut();
+		const { error } = await supabase.auth.signOut({ scope: "local" });
 
-		invalidateAll();
+		if (!error) {
+			invalidateAll();
+		}
 	}
 </script>
 
@@ -17,6 +19,7 @@
 		<h1 class="text-primary text-2xl font-bold">Stuco Pizza Orders</h1>
 	</a>
 
+	<!-- svelte-ignore a11y_consider_explicit_label -->
 	<button onclick={logout} class="size-12 hover:bg-gray-200 flex justify-center items-center cursor-pointer rounded-lg">
 		<i class="scale-125 fa-solid fa-right-from-bracket"></i>
 	</button>
