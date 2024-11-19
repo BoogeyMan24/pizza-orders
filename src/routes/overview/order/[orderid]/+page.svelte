@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>{order.name}'s Order Summary | Pizza Orders</title>
+	<title>{order.name}'s Order Summary | Lunch Orders</title>
 </svelte:head>
 
 <script lang="ts">
@@ -8,7 +8,10 @@
 	import toast from "svelte-hot-french-toast";
 
 	let props = $props();
-	let { data: { order, supabase } } = props;
+	let { data: { supabase } } = props;
+
+
+	let order = $state(props.data.order);
 
 	let path = $page.url.pathname;
 
@@ -61,7 +64,7 @@
 		loading = true;
 
 		let res = await supabase
-			.from("orders")
+			.from("paid_orders")
 			.update({ paid: true })
 			.eq("order_id", order.order_id);
 
@@ -86,7 +89,7 @@
 
 
 	<div class="flex justify-between my-2">
-		<h3 class="monofont w-[60%]">Pizza Date: {date.getDate()} {convertNumToStringMonth(date.getMonth() + 1)}, {date.getFullYear()}</h3>
+		<h3 class="monofont w-[60%]">Lunch Date: {date.getDate()} {convertNumToStringMonth(date.getMonth() + 1)}, {date.getFullYear()}</h3>
 		<h3 class="monofont">{order.order_id}</h3>
 	</div>
 
@@ -126,6 +129,8 @@
 			<button onclick={() => confirmDialog = true} class="text-white font-bold hover:bg-red-500 bg-red-400 transition-all px-6 py-2 rounded-xl">Change Order</button>
 		</div>
 	{/if} -->
+	<h1>Name: {order.name}</h1>
+	<h1 class="mb-2">Grade: {order.grade}</h1>
 
 	{#if loading}
 		<i class="fa-solid fa-spinner animate-spin"></i>

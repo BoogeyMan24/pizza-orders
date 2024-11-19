@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>{order.name}'s Order Summary | Pizza Orders</title>
+	<title>{order.name}'s Order Summary | Lunch Orders</title>
 </svelte:head>
 
 <script lang="ts">
@@ -68,11 +68,12 @@
 {#if confirmDialog}
 	<div class="absolute w-dvw h-dvh flex justify-center items-center">
 		<div transition:fly={{ y: 100 }} class="relative w-[28rem] bg-white rounded-2xl p-6 z-50">
+			<!-- svelte-ignore a11y_consider_explicit_label -->
 			<button onclick={() => confirmDialog = !confirmDialog} class="absolute top-4 right-4 scale-150">
 				<i class="fa-solid fa-xmark text-gray-400 hover:text-gray-300 transition-all"></i>
 			</button>
 			<h1 class="text-red-500 font-bold text-2xl mb-1">Are you sure?</h1>
-			<h2>This action is permanent and you will lose this order.</h2>
+			<h2>You will need to remember the order id ({order.order_id}) to find this order again.</h2>
 			<div class="mt-2 flex justify-end items-center">
 				<button onclick={newOrder} class="text-white font-bold hover:bg-red-500 bg-red-400 transition-all px-6 py-1 rounded-xl">Confirm</button>
 			</div>
@@ -85,7 +86,7 @@
 
 
 	<div class="flex justify-between my-2">
-		<h3 class="monofont w-[60%]">Pizza Date: {date.getDate()} {convertNumToStringMonth(date.getMonth() + 1)}, {date.getFullYear()}</h3>
+		<h3 class="monofont w-[60%]">Lunch Date: {date.getDate()} {convertNumToStringMonth(date.getMonth() + 1)}, {date.getFullYear()}</h3>
 		<h3 class="monofont">{order.order_id}</h3>
 	</div>
 
@@ -122,7 +123,7 @@
 
 	{#if !order.paid}
 		<div class="h-24 flex justify-center items-center">
-			<button onclick={() => confirmDialog = true} class="text-white font-bold hover:bg-red-500 bg-red-400 transition-all px-6 py-2 rounded-xl">Change Order</button>
+			<button onclick={() => confirmDialog = true} class="text-white font-bold hover:bg-red-500 bg-red-400 transition-all px-6 py-2 rounded-xl">New Order</button>
 		</div>
 	{/if}
 
@@ -134,7 +135,7 @@
 	{:else}
 		<div class="mt-8">
 			<h1 class="text-center text-xl font-bold text-red-500">This order has not been paid yet!</h1>
-			<h1 class="text-center font-medium">Please make sure to pay at the pizza order stand on Thursday.</h1>
+			<h1 class="text-center font-medium">Please make sure to pay at the order stand on Thursday.</h1>
 		</div>
 	{/if}
 </section>

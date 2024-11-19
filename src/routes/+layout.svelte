@@ -4,8 +4,9 @@
 
 <script lang="ts">
 	import '../app.css';
-	import { invalidate } from '$app/navigation'
-	import { onMount } from 'svelte'
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
+
 	let { children, data } = $props();
 
 	import { Toaster } from 'svelte-hot-french-toast';

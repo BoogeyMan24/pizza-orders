@@ -65,9 +65,7 @@
 
 	let loading = $state(true);
 
-	let ordersAll: Order[] = $state([]);
-	let ordersDisplayed: Order[] = $state([]);
-
+	let orders: Order[] = $state([]);
 	onMount(async () => {
 		let orderRes = await supabase
 			.from("orders")
@@ -80,56 +78,40 @@
 			console.log("failed to get orders");
 			return;
 		} else {
-			ordersAll = orderRes.data;
-			ordersDisplayed = ordersAll;
+			orders = orderRes.data;
 
 			loading = false;
 		}
 	});
-
-	let input = $state("");
-
-
-	// $effect(() => {
-	// 	ordersDisplayed = ordersAll.filter((item) => item.order_id.includes(input.toLowerCase()));
-	// });
 </script>
 
 
+
 <div class="mt-16 pl-24">
-	<div class="flex gap-6 items-center">
-		<h1 class="text-3xl font-bold mb-2">{date.getDate() + " " + convertNumToStringMonth(date.getMonth() + 1) + ", " + date.getFullYear()}</h1>
-		<a href={$page.url.pathname + "/summary"} class="text-xl font-semibold">Summary ></a>
-	</div>
-	<div class="-ml-2 h-1 w-[30rem] bg-primary"></div>
+	<h1 class="text-3xl font-bold mb-2">Summary - {date.getDate() + " " + convertNumToStringMonth(date.getMonth() + 1) + ", " + date.getFullYear()}</h1>
+	<div class="-ml-2 h-1 w-[31rem] bg-primary"></div>
 </div>
 
+<div>Still WIP!</div>
 
-{#if loading}
+
+<!-- {#if loading}
 	<div class="h-[20rem] w-full flex justify-center items-center">
 		<div class="scale-[200%]">
 			<i class="fa-solid fa-spinner animate-spin"></i>
 		</div>
 	</div>
 {:else}
-	<div class="mx-24 mt-8 w-96 flex rounded-2xl border-4 border-gray-300 has-[:focus]:border-primary has-[:focus]:border-opacity-60 transition-all">
-		<input bind:value={input} type="text" placeholder="Search orders..." class="py-2 px-4 text-lg rounded-l-2xl outline-none w-full">
-		<!-- svelte-ignore a11y_consider_explicit_label -->
-		<button onclick={() => input = ""}  class="rounded-r-2xl size-12 hover:bg-gray-100">
-			<i class="fa-solid fa-xmark scale-110"></i>
-		</button>
-	</div>
-	{#if ordersDisplayed.length == 0}
+	
+	{#if orders.length == 0}
 		<div class="h-[20rem] w-full flex justify-center items-center">
 			<h1 class="text-red-500 font-bold text-xl">No orders found!</h1>
 		</div>
 	{:else}
 		<div class="grid grid-cols-3 w-full px-24 mt-8 gap-12">
-			{#each ordersDisplayed as order, index}
-				<div class={order.order_id.includes(input.toLowerCase()) ? "block" : "hidden"}>
-					<OrderCard {...order} {supabase} {index} />
-				</div>
+			{#each orders as order, index}
+				<OrderCard {...order} {supabase} {index} />
 			{/each}
 		</div>
 	{/if}
-{/if}
+{/if} -->

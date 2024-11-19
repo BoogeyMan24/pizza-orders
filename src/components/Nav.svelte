@@ -16,7 +16,7 @@
 
 <nav class="h-20 w-full shadow-lg px-12 flex items-center justify-between">
 	<a href="/overview" class="">
-		<h1 class="text-primary text-2xl font-bold">Stuco Pizza Orders</h1>
+		<h1 class="text-primary text-2xl font-bold">Stuco Lunch Orders</h1>
 	</a>
 
 	<!-- svelte-ignore a11y_consider_explicit_label -->

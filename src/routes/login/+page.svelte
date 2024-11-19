@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>Login | Pizza Orders</title>
+	<title>Login | Lunch Orders</title>
 </svelte:head>
 
 <script lang="ts">

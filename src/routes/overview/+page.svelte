@@ -1,46 +1,46 @@
 <svelte:head>
-	<title>Dashboard | Pizza Orders</title>
+	<title>Dashboard | Lunch Orders</title>
 </svelte:head>
 
 <script lang="ts">
-	import PizzaOrderCard from "$components/PizzaOrderCard.svelte";
+	import LunchOrderCard from "$components/LunchOrderCard.svelte";
 	import { onMount } from "svelte";
 	import toast from "svelte-hot-french-toast";
 
 	let { data } = $props();
 	let { supabase } = data;
 
-	type PizzaOrderCardType = {
+	type LunchOrderCardType = {
 		date: Date
 		count: number
 	}
 
-	let pizzaOrderCards: PizzaOrderCardType[] = $state([]);
-	let pizzaOrderCardsPast: PizzaOrderCardType[] = $state([]);
+	let lunchOrderCards: LunchOrderCardType[] = $state([]);
+	let lunchOrderCardsPast: LunchOrderCardType[] = $state([]);
 
 	let loading = $state(true);
 	onMount(async () => {
-		let pizzaOrderCardsRes = await supabase
+		let lunchOrderCardsRes = await supabase
 			.from("pizza_days")
 			.select("*")
 	
-		if (pizzaOrderCardsRes.error != null) {
+		if (lunchOrderCardsRes.error != null) {
 			toast.error("Something went wrong!");
-			console.log("Couldn't get pizza days.");
+			console.log("Couldn't get lunch days.");
 		} else {
-			pizzaOrderCards = pizzaOrderCardsRes.data;
+			lunchOrderCards = lunchOrderCardsRes.data;
 
-			pizzaOrderCards.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+			lunchOrderCards.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-			for (let date of pizzaOrderCards) {
+			for (let date of lunchOrderCards) {
 				if (new Date(date.date).getTime() - Date.now() < 0) {
-					pizzaOrderCardsPast.push(pizzaOrderCards.shift() as PizzaOrderCardType);
-					console.log(pizzaOrderCards);
+					lunchOrderCardsPast.push(lunchOrderCards.shift() as LunchOrderCardType);
+					console.log(lunchOrderCards);
 				}
 			}
 
-			pizzaOrderCards = pizzaOrderCards;
-			pizzaOrderCardsPast = pizzaOrderCardsPast;
+			lunchOrderCards = lunchOrderCards;
+			lunchOrderCardsPast = lunchOrderCardsPast;
 
 			loading = false;
 		}
@@ -65,8 +65,8 @@
 		<h1 class="text-xl font-bold">Upcoming</h1>
 	</div>
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full px-24 mt-8 gap-6">
-		{#each pizzaOrderCards as pizzaOrderCard}
-			<PizzaOrderCard {...pizzaOrderCard} />
+		{#each lunchOrderCards as lunchOrderCard}
+			<LunchOrderCard {...lunchOrderCard} />
 		{/each}
 	</div>
 
@@ -74,8 +74,8 @@
 		<h1 class="text-xl font-bold">Past</h1>
 	</div>
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full px-24 mt-8 gap-6">
-		{#each pizzaOrderCardsPast as pizzaOrderCard}
-			<PizzaOrderCard {...pizzaOrderCard} />
+		{#each lunchOrderCardsPast as lunchOrderCard}
+			<LunchOrderCard {...lunchOrderCard} />
 		{/each}
 	</div>
 {/if}

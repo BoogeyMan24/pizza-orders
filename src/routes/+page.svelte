@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>Pizza Orders</title>
+	<title>Lunch Orders</title>
 </svelte:head>
 
 <script lang="ts">
@@ -276,7 +276,7 @@
 		
 	}
 
-	let upcoming: Date | null = $state(null);
+	let upcoming: Date | null | undefined = $state(data.upcoming);
 
 	onMount(async () => {
 		order.name = localStorage.getItem("name") ?? "";
@@ -304,9 +304,10 @@
 				let date = new Date(res.data.pizza_day);
 				date.setHours(23, 59, 59);
 
-				date = new Date(date.getTime() + 60 * 60 * 24 * 1000);
+				date = new Date(date.getTime() + 2 * 60 * 60 * 24 * 1000);
 
 				if (Date.now() - date.getTime() < 0) {
+					console.log("test1")
 					goto("/order/" + orderID);
 				} else {
 					orderID = null;
@@ -320,37 +321,9 @@
 
 
 
-		let res = await supabase
-			.from ("pizza_days")
-			.select("*")
-
-
-		if (res.error == null) {
-			let days = res.data;
-			
-			for (let day of days) {
-				if (day.cancelled) {
-					continue;
-				}
-
-				let date = new Date(day.date);
-				date.setHours(23);
-				date.setMinutes(59);
-				date.setSeconds(59);
-
-				if (date.getTime() - new Date(Date.now()).getTime() > 0 && (upcoming == null || upcoming.getTime() - date.getTime() > 0)) {
-					upcoming = date;
-				}
-			}
-		} else {
-			toast.error("Something went wrong.");
-			console.error("couldn't get pizza days");
-			return;
-		}
-
 		if (upcoming == null) {
 			toast.error("Something went wrong.");
-			console.error("couldn't get pizza days");
+			console.error("couldn't get lunch days 2");
 			return;
 		}
 	});
@@ -423,12 +396,14 @@
 
 				orderID = order.name.toLowerCase().replaceAll(" ", "-") + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9);
 
+				console.log(orderID);
 				let resInsert = await supabase
 					.from("orders")
 					.insert({ name: order.name, grade: order.grade, order: order.order, order_id: orderID, total: order.total, pizza_day: `${upcoming?.getFullYear()}-${upcoming?.getMonth() + 1}-${upcoming?.getDate()}` });
 
 				if (resInsert.error != null) {
 					reject();
+					console.error("resInsert Error", resInsert);
 				} else {
 					resolve("pog");
 
@@ -450,6 +425,7 @@
 
 	$effect(() => {
 		if (order.complete && (orderID != null && orderID != "")) {
+			console.log("test2")
 			goto("/order/" + orderID);
 		}
 	});
@@ -471,6 +447,7 @@
 				.single();
 
 			if (res.data != null) {
+				console.log("test3")
 				goto("/order/" + orderID);
 
 				toast.success("Order found!", { position: "bottom-end" });
@@ -481,13 +458,16 @@
 			toast.error("No past order found!", { position: "bottom-end" });
 		}
 	}
+
+
+	
 </script>
 
 
 <div class="w-full flex justify-center items-center bg-neutral-300">
 	<div class="my-8 md:my-20 w-[95%] sm:w-[90%] md:w-[50rem] bg-white rounded-3xl shadow-2xl">
 		<h1 class="relative text-center font-extrabold text-4xl md:text-5xl mt-8 tracking-wide">
-			Pizza Orders
+			Lunch Orders
 			<!-- svelte-ignore a11y_consider_explicit_label -->
 			<a href="faq" class="absolute -translate-y-3 -translate-x-2">
 				<i class="fa-solid fa-circle-question scale-[35%]"></i>
@@ -533,7 +513,7 @@
 
 
 		<section class="">
-			<h1 class="pl-6 md:pl-12 section-header">Order</h1>
+			<h1 class="pl-6 md:pl-12 section-header">Menu</h1>
 
 			
 			<!-- <h2 class="section-subheading">We will use this information to identify you.<br>Please make sure it is accurate.</h2> -->
@@ -602,7 +582,7 @@
 				{:else}
 					<div class="flex justify-between my-2">
 						<h3 class="monofont">Date: {new Date(Date.now()).getDate()} {convertNumToStringMonth(new Date(Date.now()).getMonth() + 1)}, {new Date(Date.now()).getFullYear()}</h3>
-						<h3 class="monofont">{new Date(Date.now()).getHours()}:{new Date(Date.now()).getMinutes()}</h3>
+						<h3 class="monofont">{new Date(Date.now()).getHours()}:{(new Date(Date.now()).getMinutes()).toString().length == 1 ? "0" + new Date(Date.now()).getMinutes() : new Date(Date.now()).getMinutes()}</h3>
 					</div>
 
 					{#each order.order as orderItem}
@@ -669,6 +649,7 @@
 		</div>
 	</div>
 </div>
+
 
 <style class="postcss">
 	.section-header {
