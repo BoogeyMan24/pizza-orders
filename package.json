@@ -33,7 +33,6 @@
 		"@supabase/ssr": "^0.5.1",
 		"@supabase/supabase-js": "^2.46.1",
 		"@sveltejs/adapter-node": "^5.2.9",
-		"mockdate": "^3.0.5",
 		"svelte-hot-french-toast": "^1.0.0"
 	}
 }
