@@ -636,12 +636,12 @@
 			</div>
 		{/if}
 
-		<div class="mb-2 flex justify-center items-center gap-6">
+		<div class="mb-2 flex flex-col sm:flex-row justify-center items-center gap-6">
 			<div class="flex justify-center items-center gap-2">
 				<h5 class="font-medium opacity-70 text-sm">Searching for your order?</h5>
 				<a href="order" class="text-sm hover:text-primary opacity-70 hover:opacity-100 font-semibold cursor-pointer">Check Here</a>
 			</div>
-			•
+			<div class="hidden sm:block">•</div>
 			<div class="flex justify-center items-center gap-2">
 				<h5 class="font-medium opacity-70 text-sm">Got questions?</h5>
 				<a href="faq" class="text-sm hover:text-primary opacity-70 hover:opacity-100 font-semibold cursor-pointer">FAQ</a>
