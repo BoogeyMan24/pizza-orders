@@ -97,11 +97,12 @@
 
 
 <div class="mt-16 pl-24">
-	<div class="flex gap-6 items-center">
-		<h1 class="text-3xl font-bold mb-2">{date.getDate() + " " + convertNumToStringMonth(date.getMonth() + 1) + ", " + date.getFullYear()}</h1>
-		<a href={$page.url.pathname + "/summary"} class="text-xl font-semibold">Summary ></a>
+	<div class="w-auto">
+		<div class="relative gap-6 items-center before:absolute before:bottom-0 before:h-1 before:w-full before:scale-x-105 before:bg-primary inline-flex">
+			<h1 class="text-3xl font-bold mb-2">{date.getDate() + " " + convertNumToStringMonth(date.getMonth() + 1) + ", " + date.getFullYear()}</h1>
+			<a href={$page.url.pathname + "/summary"} class="text-xl font-semibold">Summary ></a>
+		</div>
 	</div>
-	<div class="-ml-2 h-1 w-[30rem] bg-primary"></div>
 </div>
 
 

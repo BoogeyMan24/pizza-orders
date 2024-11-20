@@ -49,8 +49,9 @@
 
 
 <div class="mt-16 pl-24">
-	<h1 class="text-3xl font-bold mb-2">Dashboard</h1>
-	<div class="-ml-2 h-1 w-48 bg-primary"></div>
+	<div class="relative before:absolute before:bottom-0 before:h-1 before:w-full before:scale-x-105 before:bg-primary inline-flex">
+		<h1 class="text-3xl font-bold mb-2">Dashboard</h1>
+	</div>
 </div>
 
 
