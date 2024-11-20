@@ -307,7 +307,6 @@
 				date = new Date(date.getTime() + 2 * 60 * 60 * 24 * 1000);
 
 				if (Date.now() - date.getTime() < 0) {
-					console.log("test1")
 					goto("/order/" + orderID);
 				} else {
 					orderID = null;

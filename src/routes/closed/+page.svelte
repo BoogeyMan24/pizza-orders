@@ -8,8 +8,6 @@
 	let upcoming: Date | null = null;
 	let sellingWindow: { start: Date | null, end: Date | null } = $state({ start: null, end: null });
 	onMount(async () => {
-		
-
 		const res = await supabase
 			.from ("pizza_days")
 			.select("*")
@@ -25,8 +23,6 @@
 			return;
 		}
 
-		console.log(upcoming);
-
 		sellingWindow = {
 			start: new Date(upcoming.getTime() - 3 * 24 * 60 * 60 * 1000),
 			end: upcoming
@@ -36,6 +32,34 @@
 
 		if (sellingWindow.start?.getTime() - Date.now() < 0) {
 			goto("/");
+		}
+
+		let orderID = localStorage.getItem("orderID");
+
+
+		if (orderID != null && orderID != "") {
+			let res = await supabase
+				.from("orders")
+				.select("*")
+				.eq("order_id", orderID)
+				.maybeSingle();
+
+			if (res.error == null && res.data != null) {
+				let date = new Date(res.data.pizza_day);
+				date.setHours(23, 59, 59);
+
+				date = new Date(date.getTime() + 2 * 60 * 60 * 24 * 1000);
+
+				if (Date.now() - date.getTime() < 0) {
+					goto("/order/" + orderID);
+				} else {
+					orderID = null;
+					localStorage.removeItem("orderID");
+				}
+			} else {
+				orderID = null;
+				localStorage.removeItem("orderID");
+			}
 		}
 	})
 

@@ -88,11 +88,7 @@
 	});
 
 	let input = $state("");
-
-
-	// $effect(() => {
-	// 	ordersDisplayed = ordersAll.filter((item) => item.order_id.includes(input.toLowerCase()));
-	// });
+	let gradeInput = $state("all");
 </script>
 
 
@@ -113,21 +109,35 @@
 		</div>
 	</div>
 {:else}
-	<div class="mx-24 mt-8 w-96 flex rounded-2xl border-4 border-gray-300 has-[:focus]:border-primary has-[:focus]:border-opacity-60 transition-all">
-		<input bind:value={input} type="text" placeholder="Search orders..." class="py-2 px-4 text-lg rounded-l-2xl outline-none w-full">
-		<!-- svelte-ignore a11y_consider_explicit_label -->
-		<button onclick={() => input = ""}  class="rounded-r-2xl size-12 hover:bg-gray-100">
-			<i class="fa-solid fa-xmark scale-110"></i>
-		</button>
+	<div class="mx-24 mt-8 flex gap-12 items-center">
+		<div class="w-96 flex rounded-2xl border-4 border-gray-300 has-[:focus]:border-primary has-[:focus]:border-opacity-60 transition-all">
+			<input bind:value={input} type="text" placeholder="Search orders..." class="py-2 px-4 text-lg rounded-l-2xl outline-none w-full">
+			<!-- svelte-ignore a11y_consider_explicit_label -->
+			<button onclick={() => input = ""}  class="rounded-r-2xl size-12 hover:bg-gray-100">
+				<i class="fa-solid fa-xmark scale-110"></i>
+			</button>
+		</div>
+		<div class="self-stretch">
+			<select bind:value={gradeInput} class="h-full bg-gray-100">
+				<option value="all">All</option>
+				<option value="7">12 YO / 7</option>
+				<option value="8">13 YO / 8</option>
+				<option value="9">Sec 1 / 9</option>
+				<option value="10">Sec 2 / 10</option>
+				<option value="11">Sec 3 / 11</option>
+				<option value="12">Sec 4 / 12</option>
+				<option value="staff">Staff</option>
+			</select>
+		</div>
 	</div>
 	{#if ordersDisplayed.length == 0}
 		<div class="h-[20rem] w-full flex justify-center items-center">
 			<h1 class="text-red-500 font-bold text-xl">No orders found!</h1>
 		</div>
 	{:else}
-		<div class="grid grid-cols-3 w-full px-24 mt-8 gap-12">
+		<div class="grid grid-cols-3 w-full px-24 mt-8 gap-6">
 			{#each ordersDisplayed as order, index}
-				<div class={order.order_id.includes(input.toLowerCase()) ? "block" : "hidden"}>
+				<div class={order.order_id.includes(input.toLowerCase()) && (gradeInput == "all" || order.grade == gradeInput) ? "block" : "hidden"}>
 					<OrderCard {...order} {supabase} {index} />
 				</div>
 			{/each}
