@@ -48,7 +48,7 @@
 </script>
 
 
-<div class="mt-16 pl-24">
+<div class="mt-16 pl-6 sm:pl-24">
 	<div class="relative before:absolute before:bottom-0 before:h-1 before:w-full before:scale-x-105 before:bg-primary inline-flex">
 		<h1 class="text-3xl font-bold mb-2">Dashboard</h1>
 	</div>
@@ -62,16 +62,16 @@
 		</div>
 	</div>
 {:else}
-	<div class="mt-16 pl-24 -mb-4">
+	<div class="mt-16 pl-6 sm:pl-24 -mb-4">
 		<h1 class="text-xl font-bold">Upcoming</h1>
 	</div>
-	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full px-24 mt-8 gap-6">
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full px-6 sm:px-24 mt-8 gap-6">
 		{#each lunchOrderCards as lunchOrderCard}
 			<LunchOrderCard {...lunchOrderCard} />
 		{/each}
 	</div>
 
-	<div class="mt-16 pl-24 -mb-4">
+	<div class="mt-16 pl-6 sm:pl-24 -mb-4">
 		<h1 class="text-xl font-bold">Past</h1>
 	</div>
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full px-24 mt-8 gap-6">
