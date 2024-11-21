@@ -395,7 +395,6 @@
 
 				orderID = order.name.toLowerCase().replaceAll(" ", "-") + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9)  + Math.floor(Math.random() * 9);
 
-				console.log(orderID);
 				let resInsert = await supabase
 					.from("orders")
 					.insert({ name: order.name, grade: order.grade, order: order.order, order_id: orderID, total: order.total, pizza_day: `${upcoming?.getFullYear()}-${upcoming?.getMonth() + 1}-${upcoming?.getDate()}` });
@@ -430,7 +429,7 @@
 	});
 
 	function validateKey(event: KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement; }) {
-		if (!/^[a-zA-Z]+$/.test(event.key)) {
+		if (!/^[a-zA-Z ]+$/.test(event.key)) {
 			event.preventDefault();
 		}
 	}
@@ -487,10 +486,11 @@
 			<h1 class="section-header">General Information</h1>
 			<!-- <h2 class="section-subheading">We will use this information to identify you.<br>Please make sure it is accurate.</h2> -->
 			
-			<div class="flex items-center gap-8">
+			<div class="flex items-start gap-8">
 				<label class="w-[50%]">
 					<p class="font-medium">Name</p>
 					<input disabled={order.complete || loading} bind:value={order.name} oninput={onNameInput} onkeydown={validateKey} maxlength="12"  type="text" class="h-10 w-full p-2 border-4 rounded-xl border-gray-300 focus:border-sky-300 transition-all outline-none">
+					<p class="text-xs mt-1 font-medium">please keep the name short.</p>
 				</label>
 				<label class="w-28">
 					<p class="font-medium">Grade</p>
@@ -621,7 +621,7 @@
 						{#if upcoming == null}
 							<p class="font-semibold text-red-500">Please enter a name and grade!</p>
 						{:else}
-							<h3 class="mt-2 text-sm">Ordering for the {upcoming?.getDate() + " " + convertNumToStringMonth(upcoming?.getMonth() + 1) + ", " + upcoming?.getFullYear()}</h3>
+							<h3 class="mt-2 text-sm">Ordering for the {(upcoming?.getDate() + 1) + " " + convertNumToStringMonth(upcoming?.getMonth() + 1) + ", " + upcoming?.getFullYear()}</h3>
 						{/if}
 						{#if order.complete}
 							<p class="mt-2">Thanks for Ordering!</p>

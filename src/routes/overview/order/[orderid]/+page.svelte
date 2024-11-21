@@ -89,7 +89,7 @@
 
 
 	<div class="flex justify-between my-2">
-		<h3 class="monofont w-[60%]">Lunch Date: {date.getDate()} {convertNumToStringMonth(date.getMonth() + 1)}, {date.getFullYear()}</h3>
+		<h3 class="monofont w-[60%]">Lunch Date: {date.getDate() + 1} {convertNumToStringMonth(date.getMonth() + 1)}, {date.getFullYear()}</h3>
 		<h3 class="monofont">{order.order_id}</h3>
 	</div>
 
