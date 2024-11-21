@@ -619,7 +619,7 @@
 					<div class="mt-12 flex flex-col items-center justify-center">
 						<button disabled={order.complete || loading || upcoming == null} onclick={completeOrder} class="bg-primary rounded-xl px-10 py-2 hover:opacity-90 text-white font-medium">Complete Order</button>
 						{#if upcoming == null}
-							<p class="font-semibold text-red-500">Please enter a name and grade!</p>
+							<p class="font-semibold text-red-500">Please enter your name and grade!</p>
 						{:else}
 							<h3 class="mt-2 text-sm">Ordering for the {(upcoming?.getDate() + 1) + " " + convertNumToStringMonth(upcoming?.getMonth() + 1) + ", " + upcoming?.getFullYear()}</h3>
 						{/if}
