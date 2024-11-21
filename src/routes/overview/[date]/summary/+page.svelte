@@ -65,20 +65,32 @@
 
 	let loading = $state(true);
 
-	let orders: Order[] = $state([]);
+	let orderTotals: any = $state({});
+	let total = $state(0);
 	onMount(async () => {
 		let orderRes = await supabase
-			.from("orders")
-			.select("*")
-			.eq("pizza_day", $page.params.date);
-
+			.from("paid_orders")
+			.select("*, order_id(*)")
+			.eq("order_id.pizza_day", $page.params.date)
+			.eq("paid", true);
 
 		if (orderRes.error != null) {
 			toast.error("Something went wrong!");
 			console.log("failed to get orders");
 			return;
 		} else {
-			orders = orderRes.data;
+
+			for (let i = 0; i < orderRes.data.length; i++) {
+				let order = orderRes.data[i].order_id;
+				
+				for (let orderItem of order.order) {
+					orderTotals[orderItem.id] = (orderTotals[orderItem.id] ?? 0) + orderItem.quantity;
+					total += orderItem.cost * orderItem.quantity;
+				}
+			}
+
+			orderTotals = orderTotals;
+			console.log(Object.keys(orderTotals));
 
 			loading = false;
 		}
@@ -87,16 +99,14 @@
 
 
 
-<div class="mt-16 pl-24">
+<div class="mt-16 pl-6 sm:pl-24">
 	<div class="relative before:absolute before:bottom-0 before:h-1 before:w-full before:scale-x-105 before:bg-primary inline-flex">
 		<h1 class="text-3xl font-bold mb-2">Summary - {date.getDate() + " " + convertNumToStringMonth(date.getMonth() + 1) + ", " + date.getFullYear()}</h1>
 	</div>
 </div>
 
-<div>Still WIP!</div>
 
-
-<!-- {#if loading}
+{#if loading}
 	<div class="h-[20rem] w-full flex justify-center items-center">
 		<div class="scale-[200%]">
 			<i class="fa-solid fa-spinner animate-spin"></i>
@@ -104,15 +114,19 @@
 	</div>
 {:else}
 	
-	{#if orders.length == 0}
+	{#if Object.keys(orderTotals).length == 0}
 		<div class="h-[20rem] w-full flex justify-center items-center">
 			<h1 class="text-red-500 font-bold text-xl">No orders found!</h1>
 		</div>
 	{:else}
-		<div class="grid grid-cols-3 w-full px-24 mt-8 gap-12">
-			{#each orders as order, index}
-				<OrderCard {...order} {supabase} {index} />
+		<div class=" w-full px-6 sm:px-24 mt-8 gap-6">
+			{#each Object.keys(orderTotals) as order}
+				<div class="flex gap-4">
+					<h1 class="w-6 text-center">{orderTotals[order]}</h1> x
+					<h1>{order}</h1>
+				</div>
 			{/each}
+			<h1 class="text-xl font-bold mt-4">Total: € {total.toFixed(2)}</h1>
 		</div>
 	{/if}
-{/if} -->
+{/if}

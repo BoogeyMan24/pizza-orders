@@ -89,6 +89,7 @@
 
 	let input = $state("");
 	let gradeInput = $state("all");
+	// let paid = $state(false);
 </script>
 
 
@@ -129,6 +130,10 @@
 				<option value="staff">Staff</option>
 			</select>
 		</div>
+		<!-- <label class="flex items-center justify-center gap-2">
+			<input bind:checked={paid} type="checkbox" class="size-6 rounded-lg border-8">
+			<p class="text-lg">Paid</p>
+		</label> -->
 	</div>
 	{#if ordersDisplayed.length == 0}
 		<div class="h-[20rem] w-full flex justify-center items-center">
