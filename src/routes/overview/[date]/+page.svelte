@@ -135,7 +135,7 @@
 			<h1 class="text-red-500 font-bold text-xl">No orders found!</h1>
 		</div>
 	{:else}
-		<div class="grid grid-cols-3 w-full px-24 mt-8 gap-6">
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full px-24 mt-8 gap-6">
 			{#each ordersDisplayed as order, index}
 				<div class={order.order_id.includes(input.toLowerCase()) && (gradeInput == "all" || order.grade == gradeInput) ? "block" : "hidden"}>
 					<OrderCard {...order} {supabase} {index} />
