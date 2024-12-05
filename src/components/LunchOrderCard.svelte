@@ -43,7 +43,7 @@
 	}
 </script>
 
-<a href={"/overview/" + date} class="p-4 rounded-xl shadow-xl border flex justify-between items-center">
+<a href={"/overview/" + dateDate.getFullYear() + "-" + (dateDate.getMonth() + 1) + "-" + (dateDate.getDate().toString().length == 1 ? "0" + dateDate.getDate() : dateDate.getDate())} class="p-4 rounded-xl shadow-xl border flex justify-between items-center">
 	<h1>{dateDate.getDate() + " " + convertNumToStringMonth(dateDate.getMonth() + 1) + ", " + dateDate.getFullYear()}</h1>
 	<h1>{count}</h1>
 </a>

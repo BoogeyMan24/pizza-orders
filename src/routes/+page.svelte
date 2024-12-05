@@ -490,7 +490,7 @@
 				<label class="w-[50%]">
 					<p class="font-medium">Name</p>
 					<input disabled={order.complete || loading} bind:value={order.name} oninput={onNameInput} onkeydown={validateKey} maxlength="12"  type="text" class="h-10 w-full p-2 border-4 rounded-xl border-gray-300 focus:border-sky-300 transition-all outline-none">
-					<p class="text-xs mt-1 font-medium">please keep the name short.</p>
+					<p class="text-xs mt-1 font-medium">please keep the name short (eg. "Silver").</p>
 				</label>
 				<label class="w-28">
 					<p class="font-medium">Grade</p>

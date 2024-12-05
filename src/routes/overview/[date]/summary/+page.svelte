@@ -70,18 +70,24 @@
 	onMount(async () => {
 		let orderRes = await supabase
 			.from("paid_orders")
-			.select("*, order_id(*)")
+			.select("*, order_id!inner(*)")
 			.eq("order_id.pizza_day", $page.params.date)
-			.eq("paid", true);
+			.match({
+				"paid": true
+			});
 
 		if (orderRes.error != null) {
 			toast.error("Something went wrong!");
 			console.log("failed to get orders");
 			return;
 		} else {
-
 			for (let i = 0; i < orderRes.data.length; i++) {
 				let order = orderRes.data[i].order_id;
+				
+				console.log(orderRes);
+				if (order == null) {
+					continue;
+				}
 				
 				for (let orderItem of order.order) {
 					orderTotals[orderItem.id] = (orderTotals[orderItem.id] ?? 0) + orderItem.quantity;

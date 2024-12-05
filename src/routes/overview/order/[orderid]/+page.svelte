@@ -65,7 +65,7 @@
 
 		let res = await supabase
 			.from("paid_orders")
-			.update({ paid: true })
+			.update({ paid: true, payment_date: order.pizza_day })
 			.eq("order_id", order.order_id);
 
 		if (res.error != null) {
@@ -80,7 +80,7 @@
 	}
 </script>
 
-<a href={"/overview/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()} class="absolute w-32 top-20 left-0 m-2 px-4 gap-4 py-1 bg-gray-200 hover:opacity-80 rounded-xl flex items-center">
+<a href={"/overview/" + order.pizza_day} class="absolute w-32 top-20 left-0 m-2 px-4 gap-4 py-1 bg-gray-200 hover:opacity-80 rounded-xl flex items-center">
 	<i class="fa-solid fa-arrow-left-long"></i> Back
 </a>
 
