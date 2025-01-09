@@ -60,12 +60,14 @@
 
 	let loading: boolean = $state(false);
 
+	let paymentMethod: string =  $state("card");
+
 	async function markAsPaid(event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement; }) {
 		loading = true;
 
 		let res = await supabase
 			.from("paid_orders")
-			.update({ paid: true, payment_date: order.pizza_day })
+			.update({ paid: true, payment_method: paymentMethod, payment_date: order.pizza_day })
 			.eq("order_id", order.order_id);
 
 		if (res.error != null) {
@@ -141,6 +143,13 @@
 	{#if !order.paid}
 		<div class="flex justify-center items-center gap-12 mt-12">
 			<button class:disabled={loading} onclick={markAsPaid} class="px-8 py-2 bg-green-400 rounded-xl text-white font-bold shadow-lg">Mark as Paid</button>
+			<label>
+				<p>Payment Method:</p>
+				<select bind:value={paymentMethod}>
+					<option value="card">Card</option>
+					<option value="cash">Cash</option>
+				</select>
+			</label>
 		</div>
 	{/if}
 
